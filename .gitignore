@@ -209,5 +209,6 @@ marimo/_lsp/
 __marimo__/
 
 # Userdefined
+fix_heic_tools.py
 batch_tool_seg.py
 fix_heic_tools.py
