@@ -212,3 +212,4 @@ __marimo__/
 fix_heic_tools.py
 batch_tool_seg.py
 fix_heic_tools.py
+tools/sam_vit_b_01ec64.pth
