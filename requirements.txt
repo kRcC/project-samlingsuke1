@@ -1,0 +1,15 @@
+numpy
+matplotlib
+scikit-learn
+
+Pillow
+pillow-heif
+opencv-contrib-python
+opencv-python
+
+torch
+torchvision
+
+tqdm
+
+jupyter
