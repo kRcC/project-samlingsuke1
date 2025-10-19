@@ -13,3 +13,11 @@ torchvision
 tqdm
 
 jupyter
+
+torchmetrics==1.3.2
+timm
+einops
+yacs
+omegaconf
+
+

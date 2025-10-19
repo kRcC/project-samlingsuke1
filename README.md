@@ -1,6 +1,6 @@
 # Prosjekt 1 – Segmentering av verktøy med DinoV3 + logistisk regresjon
 
-Dette prosjektet ble gjort i forbindelse med samlingsuke i faget **Anvendt maskinlæring**. Målet var å bygge en komplett pipeline for segmentering av verktøy i bilder – fra rådata til en enkel modell som kan gjenkjenne og maskere nye verktøy.
+Dette prosjektet ble gjort i forbindelse med samlingsuke **Anvendt maskinlæring**. Målet var å bygge en komplett pipeline for segmentering av verktøy i bilder – fra rådata til en enkel modell som kan gjenkjenne og maskere nye verktøy.
 
 ---
 
@@ -11,37 +11,63 @@ Dette prosjektet ble gjort i forbindelse med samlingsuke i faget **Anvendt maski
 - Trene en enkel logistisk regresjon
 - Teste modellen på nye bilder og visualisere resultatene
 
----
 
-## Prosjektinnhold
+## Kort sammendrag av hva vi har gjort.
 
-- `tools/fix_heic_tools.py`  
-  Script som konverterer HEIC-bilder til ekte PNG.
-  Dette var nødvendig siden mange mobilbilder ble lagret som HEIC.
+Vi tok egne bilder av verktøy og gjorde dem brukbare ved å konvertere iPhone-HEIC til ekte PNG med et lite script (laget med hjelp fra AI).
 
-- `tools/click_n_mask_images.py` - Opprettet av KI
-  Et interaktivt GUI (Tkinter + OpenCV + SAM) der vi kunne klikke på bilder for å lage masker:  
-  - Venstreklikk = positivt punkt (verktøy)  
-  - Høyreklikk = negativt punkt (bakgrunn)  
-  - `Ctrl+Z` = angre siste punkt  
-  - `r` = reset  
-  - `s` = lagre binær maske (0/255)  
-  - `o` = lagre overlay med maske på originalbildet  
-  - Piltaster = bla til neste/forrige bilde  
+Vi testet flere maskeringsverktøy, men endte med å lage vårt eget:  **`tools/click_n_mask_images.py`** (Tkinter + OpenCV + SAM) ved hjelp av AI. Du klikker på bildet (positiv/negativ), så spytter det ut binære masker og overlegg.
+[Last ned SAM ViT-H (4b8939)](https://dl.fbaipublicfiles.com/segment_anything/sam_vit_h_4b8939.pth)
 
-- `main.ipynb`  
-  Notebook der vi kjører hele KI-pipelinen:
-  1. Leser inn bilder og masker
-  2. Ekstraherer features fra DinoV3
-  3. Trener en logistisk regresjon
-  4. Tester modellen og visualiserer resultater
 
-- `sam_vit_b_01ec64.pth`  
-  Modellvektene for Segment Anything (SAM), brukt i annoterings-GUI.
+Maskene ble brukt til å trene en enkel modell: DINOv3 for å hente bilde-trekk, og logistisk regresjon for å avgjøre piksel = verktøy eller bakgrunn.
 
-- `requirements.txt`  
-  Liste over alle python-pakker vi brukte.
+Alt kjøres fra **`main.ipynb`** etter at data er på plass. **`requirements.txt`** dekker pakkene, SAM-vekter trengs til klikke-verktøyet.
 
----
+## Maskeringsverktøy vi brukte
+**`tools/click_n_mask_images.py`** (interaktivt GUI med Tkinter + OpenCV + SAM):
 
-pip install -r requirements.txt
+- Venstreklikk = positivt punkt (verktøy)
+- Høyreklikk = negativt punkt (bakgrunn)
+- `Ctrl+Z` = angre siste punkt
+- `r` = reset
+- `s` = lagre binær maske (PNG, 0/255)
+- `o` = lagre overlegg (maske oppå original)
+- Piltaster = forrige/neste bilde
+
+
+## Illustrasjon / eksempler
+
+### 1) Datasett og maskeformat
+![Image/Mask/FG/BG](data/Image_Mask_Foreground_Background.png)
+![Resized mask with patch](data/Resized%20Mask%20with%20Patch.png)
+![Original + kvantisert maske](data/Original%20Mask%2BQuantized%20Mask.png)
+
+### 2) Modellresultater: Ground Truth vs Predicted
+
+![GT vs Pred 1](data/Ground%20Truth%20-%20Predicted%20Mask%20-%20Input%20Image%201.png)
+![GT vs Pred 12](data/Ground%20Truth%20-%20Predicted%20Mask%20-%20Input%20Image%2012.png)
+![GT vs Pred 13](data/Ground%20Truth%20-%20Predicted%20Mask%20-%20Input%20Image%2013.png)
+![GT vs Pred 14](data/Ground%20Truth%20-%20Predicted%20Mask%20-%20Input%20Image%2014.png)
+![GT vs Pred 15](data/Ground%20Truth%20-%20Predicted%20Mask%20-%20Input%20Image%2015.png)
+
+### 3) Classifier score (eksempler)
+
+![Classifier score 08](data/Classifier%20score%2008.png)
+![Classifier score 31](data/Classifier%20score%2031.png)
+
+### 4) Evalueringsmetrikker
+
+![mAP over validering](data/mAP%20across%20all%20validation%20images.png)
+
+### 5) Scorekart og etterbehandling (foreground score + median filter)
+
+![IFSMF 1](data/Input%2Bforeground%20score%2Bmedian%20filter%201.png)
+![IFSMF 2](data/Input%2Bforeground%20score%2Bmedian%20filter%202.png)
+![IFSMF 3](data/Input%2Bforeground%20score%2Bmedian%20filter%203.png)
+![IFSMF 4](data/Input%2Bforeground%20score%2Bmedian%20filter%204.png)
+
+
+
+
+

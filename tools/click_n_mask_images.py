@@ -36,8 +36,8 @@ from segment_anything import sam_model_registry, SamPredictor
 
 # ---------- KONFIG ----------
 BASE_DIR = Path(r"C:\Anvendt KI - Projects\project-samlingsuke1\tools")
-SAM_CHECKPOINT = BASE_DIR / "sam_vit_b_01ec64.pth"  # legg .pth her
-SAM_MODEL_TYPE = "vit_b"  # "vit_b" | "vit_l" | "vit_h"
+SAM_CHECKPOINT = BASE_DIR / "sam_vit_h_4b8939.pth"  # legg .pth her
+SAM_MODEL_TYPE = "vit_h"  # "vit_b" | "vit_l" | "vit_h"
 
 CANVAS_BG = "#111111"
 POINT_POS_COLOR = (0, 255, 0)   # grønn
